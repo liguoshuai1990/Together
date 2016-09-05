@@ -1,31 +1,31 @@
 
-½»»¥ÏûÏ¢
-a. ÓÃ»§×¢²áÏûÏ¢
-   ²ÎÊı£ºUser
+äº¤äº’æ¶ˆæ¯
+a. ç”¨æˆ·æ³¨å†Œæ¶ˆæ¯
+   å‚æ•°ï¼šUser
 
-b. TogetherRequestÏûÏ¢
-   ²ÎÊı£º UserInfo TogetherInfo RequestInfo
+b. TogetherRequestæ¶ˆæ¯
+   å‚æ•°ï¼š UserInfo TogetherInfo RequestInfo
    
-c. TogetherWithÏûÏ¢
-   ²ÎÊı£º GroupInfo TogetherInfo WithInfo
+c. TogetherWithæ¶ˆæ¯
+   å‚æ•°ï¼š GroupInfo TogetherInfo WithInfo
    
-d. TogetherResponceÏûÏ¢
-   ²ÎÊı£º UserInfo TogetherInfo ResponceInfo
+d. TogetherResponceæ¶ˆæ¯
+   å‚æ•°ï¼š UserInfo TogetherInfo ResponceInfo
 
 
 			
-1¡¢¿Í»§¶Ë
-   a. ·¢ËÍÓÃ»§×¢²áÏûÏ¢
-   b. ·¢ËÍTogetherRequestÏûÏ¢
-   c. ½ÓÊÕTogetherWithÏûÏ¢
-   d. ·¢ËÍTogetherResponceÏûÏ¢
+1ã€å®¢æˆ·ç«¯
+   a. å‘é€ç”¨æˆ·æ³¨å†Œæ¶ˆæ¯
+   b. å‘é€TogetherRequestæ¶ˆæ¯
+   c. æ¥æ”¶TogetherWithæ¶ˆæ¯
+   d. å‘é€TogetherResponceæ¶ˆæ¯
 
-2¡¢·şÎñ¶Ë
-   a. ½ÓÊÕÓÃ»§×¢²áÏûÏ¢
-   b. ½ÓÊÕTogetherRequestÏûÏ¢
-   c. ·¢ËÍTogetherWithÏûÏ¢
-   d. ½ÓÊÕTogetherResponceÏûÏ¢
-   e. ½«User¼ÓÈëGroup£¬²¢Í¨ÖªGroupµÄÃ¿Ò»¸öÈË
+2ã€æœåŠ¡ç«¯
+   a. æ¥æ”¶ç”¨æˆ·æ³¨å†Œæ¶ˆæ¯
+   b. æ¥æ”¶TogetherRequestæ¶ˆæ¯
+   c. å‘é€TogetherWithæ¶ˆæ¯
+   d. æ¥æ”¶TogetherResponceæ¶ˆæ¯
+   e. å°†UseråŠ å…¥Groupï¼Œå¹¶é€šçŸ¥Groupçš„æ¯ä¸€ä¸ªäºº
 
 
                 Together Request
@@ -68,12 +68,12 @@ client2 <-------------------------------- server
 
 
    
-ºóĞøÀ©Õ¹£º
+åç»­æ‰©å±•ï¼š
 
-1¡¢Êæ·şµÄÈË»ú½»»¥½çÃæ
-2¡¢play together À©Õ¹Îª do anything together£¬±ÈÈçË³·ç³µµÈ
-2¡¢do togetherÈº·¢ÏŞÖÆÌõ¼ş
-3¡¢do together´øÓĞÉ¸Ñ¡¹¦ÄÜ
-4¡¢do together´øÓĞÆÁ±Î¹¦ÄÜ
-5¡¢ÁÄÌì¹¦ÄÜ£¬»òÕß½ÓÈëÎ¢ĞÅµÈ
-6¡¢µÚÈı·½Èí¼şÇ¶Èë¹¦ÄÜ
+1ã€èˆ’æœçš„äººæœºäº¤äº’ç•Œé¢
+2ã€play together æ‰©å±•ä¸º do anything togetherï¼Œæ¯”å¦‚é¡ºé£è½¦ç­‰
+2ã€do togetherç¾¤å‘é™åˆ¶æ¡ä»¶
+3ã€do togetherå¸¦æœ‰ç­›é€‰åŠŸèƒ½
+4ã€do togetherå¸¦æœ‰å±è”½åŠŸèƒ½
+5ã€èŠå¤©åŠŸèƒ½ï¼Œæˆ–è€…æ¥å…¥å¾®ä¿¡ç­‰
+6ã€ç¬¬ä¸‰æ–¹è½¯ä»¶åµŒå…¥åŠŸèƒ½

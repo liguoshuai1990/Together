@@ -70,10 +70,18 @@ client2 <-------------------------------- server
    
 后续扩展：
 
+
+
 1、舒服的人机交互界面
+
 2、play together 扩展为 do anything together，比如顺风车等
+
 2、do together群发限制条件
+
 3、do together带有筛选功能
+
 4、do together带有屏蔽功能
+
 5、聊天功能，或者接入微信等
+
 6、第三方软件嵌入功能

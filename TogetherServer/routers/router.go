@@ -11,6 +11,7 @@ import (
 	"Together/TogetherServer/controllers"
 	"github.com/astaxie/beego"
 	"Together/TogetherServer/controllers/userController"
+	"Together/TogetherServer/controllers/msgController"
 )
 
 func init() {
@@ -23,6 +24,11 @@ func init() {
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&userController.UserController{},
+			),
+		),
+		beego.NSNamespace("/msg",
+			beego.NSInclude(
+				&msgController.MsgController{},
 			),
 		),
 	)

@@ -1,4 +1,4 @@
-package message
+package msg
 
 import (
 	"testing"
@@ -7,11 +7,11 @@ import (
 )
 
 func Test_MqttPublish(t *testing.T) {
-	t.Log(MqttPublish("my/topic", "hello"))
+	t.Log(Publish("my/topic", "hello"))
 }
 
 func Test_MqttSubscribe(t *testing.T) {
-	t.Log(MqttSubscribe("my/topic", func(client MQTT.Client, msg MQTT.Message) {
+	t.Log(Subscribe("my/topic", func(client MQTT.Client, msg MQTT.Message) {
 		beego.Error("TOPIC: ", msg.Topic())
 		beego.Error("MSG: ", string(msg.Payload()))
 	}))

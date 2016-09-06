@@ -1,12 +1,22 @@
-package message
+package msg
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"time"
+	"github.com/astaxie/beego"
 )
 
 func clientOptions() *MQTT.ClientOptions {
-	return MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
+	ops := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
+	ops.SetAutoReconnect(true)
+	ops.SetCleanSession(true)
+	ops.SetOnConnectHandler(func(MQTT.Client) {
+		beego.Error("mqtt connect")
+	})
+	ops.SetConnectionLostHandler(func(c MQTT.Client, err error) {
+		beego.Error("mqtt disconnect ", err)
+	})
+	return ops
 }
 
 func publishClient() (MQTT.Client, error) {
@@ -30,7 +40,7 @@ func subscribeClient(f MQTT.MessageHandler) (MQTT.Client, error) {
 	return client, nil
 }
 
-func MqttPublish(topic, msgData string) error {
+func Publish(topic, msgData string) error {
 	client, err := publishClient()
 	if err != nil {
 		return err
@@ -41,15 +51,19 @@ func MqttPublish(topic, msgData string) error {
 	return nil
 }
 
-func MqttSubscribe(topic string, f MQTT.MessageHandler) error {
+func Subscribe(topic string, f MQTT.MessageHandler) error {
 	client, err := subscribeClient(f)
 	if err != nil {
 		return err
 	}
-	if token := client.Subscribe(topic, 0, nil); token.Wait() && token.Error() != nil {
+	token := client.Subscribe(topic, 0, nil)
+	if token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
-	time.Sleep(30 * time.Second)
+	for {
+		time.Sleep(3 * time.Second)
+		beego.Error(token.Error(), token.Wait(), client.IsConnected())
+	}
 	if token := client.Unsubscribe(topic); token.Wait() && token.Error() != nil {
 		return token.Error()
 	}

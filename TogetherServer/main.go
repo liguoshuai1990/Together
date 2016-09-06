@@ -3,7 +3,6 @@ package main
 import (
 	_ "Together/TogetherServer/docs"
 	_ "Together/TogetherServer/routers"
-
 	"github.com/astaxie/beego"
 )
 

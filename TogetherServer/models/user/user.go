@@ -2,8 +2,7 @@ package user
 
 import (
 	"errors"
-	"strconv"
-	"time"
+	"github.com/nu7hatch/gouuid"
 )
 
 var (
@@ -31,7 +30,8 @@ type Profile struct {
 }
 
 func AddUser(u User) string {
-	u.Id = "user_" + strconv.FormatInt(time.Now().UnixNano(), 10)
+	uid, _ := uuid.NewV4()
+	u.Id = uid.String()
 	UserList[u.Id] = &u
 	return u.Id
 }

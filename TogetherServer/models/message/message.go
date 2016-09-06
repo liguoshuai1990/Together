@@ -1,53 +1,26 @@
-package Message
+package message
 
-import (
-	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"strconv"
-	"github.com/astaxie/beego"
-	"time"
-)
+/* Together请求消息： 用户发送到服务端的消息，请求加入组一起玩
+ *  消息携带内容:
+ *  1、用户信息
+ *  2、组信息 (首次发送携带组topic，其余为组ID)
+ *  3、组成员
+ */
+func SendTogetherRequest()  {
+	
+}
+func ResvTogetherRequest()  {
 
-//define a function for the default message handler
-var f MQTT.MessageHandler = func(client MQTT.Client, msg MQTT.Message) {
-	beego.Error("TOPIC: ", msg.Topic())
-	beego.Error("MSG: ", string(msg.Payload()))
 }
 
-func MqttPublish() error {
-	opts := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
-	opts.SetClientID("go-simple")
-	opts.SetDefaultPublishHandler(f)
-	client := MQTT.NewClient(opts)
-	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		return token.Error()
-	}
-	for i := 0; i < 10; i++ {
-		token := client.Publish("test/topic", byte(0), false, "hello world~!" + strconv.Itoa(i))
-		token.Wait()
-	}
-	client.Disconnect(250)
-	return nil
-}
+/* Group请求消息:  服务端发给用户的消息，请求用户加入组一起玩
+ *  消息携带内容:
+ *  1、组信息 (携带组topic、组ID)
+ *  2、组成员
+ */
+func SendGroupRequest()  {
 
-func MqttSubscribe() error {
-	opts := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
-	opts.SetClientID("go-simple")
-	opts.SetDefaultPublishHandler(f)
-	client := MQTT.NewClient(opts)
-	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		return token.Error()
-	}
-	//subscribe to the topic /go-mqtt/sample and request messages to be delivered
-	//at a maximum qos of zero, wait for the receipt to confirm the subscription
-	if token := client.Subscribe("go-mqtt/sample", 0, nil); token.Wait() && token.Error() != nil {
-		return token.Error()
-	}
-	//client.Disconnect(250)
-	time.Sleep(30 * time.Second)
-	//unsubscribe from /go-mqtt/sample
-	if token := client.Unsubscribe("go-mqtt/sample"); token.Wait() && token.Error() != nil {
-		return token.Error()
-	}
-	client.Disconnect(250)
-	return nil
+}
+func ResvGroupRequest()  {
+
 }

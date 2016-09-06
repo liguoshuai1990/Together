@@ -2,7 +2,7 @@ package msg
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"time"
+	//"time"
 	"github.com/astaxie/beego"
 )
 
@@ -60,13 +60,15 @@ func Subscribe(topic string, f MQTT.MessageHandler) error {
 	if token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
-	for {
-		time.Sleep(3 * time.Second)
-		beego.Error(token.Error(), token.Wait(), client.IsConnected())
-	}
-	if token := client.Unsubscribe(topic); token.Wait() && token.Error() != nil {
-		return token.Error()
-	}
-	client.Disconnect(250)
+	//go func() {
+	//	for {
+	//		time.Sleep(3 * time.Second)
+	//		beego.Error(token.Error(), token.Wait(), client.IsConnected())
+	//	}
+	//	if token := client.Unsubscribe(topic); token.Wait() && token.Error() != nil {
+	//		return
+	//	}
+	//	client.Disconnect(250)
+	//}()
 	return nil
 }

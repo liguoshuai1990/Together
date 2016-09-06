@@ -2,7 +2,6 @@ package message
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"github.com/astaxie/beego"
 	"time"
 )
 

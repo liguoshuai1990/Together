@@ -3,7 +3,6 @@ package message
 import (
 	"github.com/astaxie/beego"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"go/test/fixedbugs"
 )
 
 /* Together请求消息： 用户发送到服务端的消息，请求加入组一起玩

@@ -7,21 +7,15 @@ import (
 )
 
 func clientOptions() *MQTT.ClientOptions {
-	ops := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
-	ops.SetAutoReconnect(true)
-	ops.SetCleanSession(true)
-	ops.SetOnConnectHandler(func(MQTT.Client) {
-		beego.Error("mqtt connect")
-	})
-	ops.SetConnectionLostHandler(func(c MQTT.Client, err error) {
-		beego.Error("mqtt disconnect ", err)
-	})
-	return ops
+	opts := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
+	opts.SetAutoReconnect(true)
+	opts.SetCleanSession(true)
+	return opts
 }
 
 func publishClient() (MQTT.Client, error) {
 	opts := clientOptions()
-	opts.SetClientID("TogitherServer")
+	opts.SetClientID("TogitherClient")
 	client := MQTT.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		return nil, token.Error()
@@ -29,10 +23,17 @@ func publishClient() (MQTT.Client, error) {
 	return client, nil
 }
 
-func subscribeClient(f MQTT.MessageHandler) (MQTT.Client, error) {
+func subscribeClient(topic string, f MQTT.MessageHandler) (MQTT.Client, error) {
 	opts := clientOptions()
 	opts.SetClientID("TogitherServer")
 	opts.SetDefaultPublishHandler(f)
+	opts.SetOnConnectHandler(func(client MQTT.Client) {
+		beego.Info("mqtt connect")
+		subscribe(topic, client)
+	})
+	opts.SetConnectionLostHandler(func(client MQTT.Client, err error) {
+		beego.Error("mqtt disconnect ", err)
+	})
 	client := MQTT.NewClient(opts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		return nil, token.Error()
@@ -51,24 +52,18 @@ func Publish(topic, msgData string) error {
 	return nil
 }
 
-func Subscribe(topic string, f MQTT.MessageHandler) error {
-	client, err := subscribeClient(f)
-	if err != nil {
-		return err
-	}
+func subscribe(topic string, client MQTT.Client) error {
 	token := client.Subscribe(topic, 0, nil)
 	if token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
-	//go func() {
-	//	for {
-	//		time.Sleep(3 * time.Second)
-	//		beego.Error(token.Error(), token.Wait(), client.IsConnected())
-	//	}
-	//	if token := client.Unsubscribe(topic); token.Wait() && token.Error() != nil {
-	//		return
-	//	}
-	//	client.Disconnect(250)
-	//}()
 	return nil
+}
+
+func Subscribe(topic string, f MQTT.MessageHandler) error {
+	client, err := subscribeClient(topic, f)
+	if err != nil {
+		return err
+	}
+	return subscribe(topic, client)
 }

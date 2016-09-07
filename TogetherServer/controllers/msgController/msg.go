@@ -3,7 +3,7 @@ package msgController
 import (
 	"github.com/astaxie/beego"
 	"Together/TogetherServer/models/mgs"
-	"net/http"
+	"time"
 )
 
 
@@ -27,17 +27,13 @@ func resvGroupMessage(topic, msg string)  {
 	beego.Error("MSG: ", msg)
 }
 
-// @Title start resv together message
-// @Description start resv together message
-// @Success 200 body is success
-// @Failure 403 body
-// @router /start [post]
-func (m *MsgController) Post() {
-	err := msg.ResvTogetherRequest(resvTogetherMessage)
-	if err != nil {
-		http.Error(m.Ctx.ResponseWriter, err.Error(), 500)
-	} else {
-		m.Data["json"] = map[string]string{"topic": "Together/with"}
+func ResvTogetherMsg() {
+	for {
+		err := msg.ResvTogetherRequest(resvTogetherMessage)
+		if err == nil {
+			break
+		}
+		time.Sleep(3 * time.Second)
 	}
-	m.ServeJSON()
+
 }

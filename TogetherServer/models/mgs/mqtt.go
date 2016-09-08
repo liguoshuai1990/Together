@@ -7,7 +7,7 @@ import (
 )
 
 func clientOptions() *MQTT.ClientOptions {
-	opts := MQTT.NewClientOptions().AddBroker("tcp://192.168.56.101:1883")
+	opts := MQTT.NewClientOptions().AddBroker(beego.AppConfig.String("mqttServer"))
 	opts.SetAutoReconnect(true)
 	opts.SetCleanSession(true)
 	return opts

@@ -41,17 +41,6 @@ func subscribeClient(topic string, f MQTT.MessageHandler) (MQTT.Client, error) {
 	return client, nil
 }
 
-func Publish(topic, msgData string) error {
-	client, err := publishClient()
-	if err != nil {
-		return err
-	}
-	token := client.Publish(topic, byte(0), false, msgData)
-	token.Wait()
-	client.Disconnect(250)
-	return nil
-}
-
 func subscribe(topic string, client MQTT.Client) error {
 	token := client.Subscribe(topic, 0, nil)
 	if token.Wait() && token.Error() != nil {
@@ -66,4 +55,15 @@ func Subscribe(topic string, f MQTT.MessageHandler) error {
 		return err
 	}
 	return subscribe(topic, client)
+}
+
+func Publish(topic, msgData string) error {
+	client, err := publishClient()
+	if err != nil {
+		return err
+	}
+	token := client.Publish(topic, byte(0), false, msgData)
+	token.Wait()
+	client.Disconnect(250)
+	return nil
 }

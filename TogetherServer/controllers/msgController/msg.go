@@ -33,7 +33,7 @@ func ResvTogetherMsg() {
 		if err == nil {
 			break
 		}
+		beego.Error("ResvTogetherMsg: ", err)
 		time.Sleep(3 * time.Second)
 	}
-
 }

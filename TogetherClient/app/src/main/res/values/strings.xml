@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Together</string>
+    <string name="topic_text">topic: </string>
+</resources>

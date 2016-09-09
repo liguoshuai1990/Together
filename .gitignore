@@ -5,3 +5,7 @@
 .DS_Store
 /build
 /captures
+/TogetherClient/.idea
+/TogetherServer/.idea
+/TogetherServer/lastupdate.tmp
+/TogetherServer/*.exe

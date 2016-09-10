@@ -3,7 +3,7 @@ package userController
 import (
 	"encoding/json"
 	"github.com/astaxie/beego"
-	"Together/TogetherServer/models/user"
+	"TogetherServer/models/user"
 )
 
 // Operations about Users

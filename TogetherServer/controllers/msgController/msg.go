@@ -2,7 +2,7 @@ package msgController
 
 import (
 	"github.com/astaxie/beego"
-	"Together/TogetherServer/models/mgs"
+	"TogetherServer/models/mgs"
 	"time"
 )
 

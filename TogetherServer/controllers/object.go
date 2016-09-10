@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"Together/TogetherServer/models"
+	"TogetherServer/models"
 	"encoding/json"
 
 	"github.com/astaxie/beego"

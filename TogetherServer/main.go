@@ -1,10 +1,10 @@
 package main
 
 import (
-	_ "Together/TogetherServer/docs"
-	_ "Together/TogetherServer/routers"
+	_ "TogetherServer/docs"
+	_ "TogetherServer/routers"
 	"github.com/astaxie/beego"
-	"Together/TogetherServer/controllers/msgController"
+	"TogetherServer/controllers/msgController"
 )
 
 func StartRecvMsg() {

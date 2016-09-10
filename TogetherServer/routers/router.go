@@ -8,10 +8,10 @@
 package routers
 
 import (
-	"Together/TogetherServer/controllers"
+	"TogetherServer/controllers"
 	"github.com/astaxie/beego"
-	"Together/TogetherServer/controllers/userController"
-	"Together/TogetherServer/controllers/msgController"
+	"TogetherServer/controllers/userController"
+	"TogetherServer/controllers/msgController"
 )
 
 func init() {

@@ -13,3 +13,5 @@
 /TogetherClient/app/build
 /TogetherServer/routers/commentsRouter_Together_TogetherServer_controllers.go
 /TogetherServer/routers/commentsRouter_Together_TogetherServer_controllers_userController.go
+/TogetherServer/routers/commentsRouter_controllers.go
+/TogetherServer/routers/commentsRouter_controllers_userController.go

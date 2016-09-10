@@ -3,9 +3,11 @@
 /local.properties
 *.idea
 .DS_Store
-/build
+*/build
 /captures
 /TogetherClient/.idea
 /TogetherServer/.idea
 /TogetherServer/lastupdate.tmp
 /TogetherServer/*.exe
+/TogetherClient/build
+/TogetherClient/app/build

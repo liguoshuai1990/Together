@@ -23,7 +23,7 @@ public class MqttMsg {
     }
 
     private MqttAndroidClient mqttClient() {
-        return new MqttAndroidClient(context, "tcp://iot.eclipse.org:1883", "TogetherClient");
+        return new MqttAndroidClient(context, "tcp://192.168.1.102:1883", "TogetherClient");
     }
 
     private MqttAndroidClient publishClient(){
@@ -89,6 +89,7 @@ public class MqttMsg {
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Log.v("TogetherApp", "Mqtt Client publish Connected to Mqtt Server Failed.");
+                    Log.v("TogetherApp", exception.toString());
                 }
             });
         } catch (MqttException ex){
@@ -163,9 +164,16 @@ public class MqttMsg {
         this.subscribeConnect(mqttAndroidClient, this.mqttConnectOptions(), subscriptionTopic);
     }
 
-    public void Publish(String publishTopic, String publishMessage){
+    public void Publish(String publishTopic, String publishMessage) {
         MqttAndroidClient mqttAndroidClient = this.publishClient();
         this.publishConnect(mqttAndroidClient, this.mqttConnectOptions());
-        this.publishMessage(mqttAndroidClient, publishTopic, publishMessage);
+        try {
+            Thread.sleep(1000);
+            this.publishMessage(mqttAndroidClient, publishTopic, publishMessage);
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mqttAndroidClient.close();
     }
 }

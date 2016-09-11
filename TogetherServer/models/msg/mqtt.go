@@ -49,7 +49,7 @@ func subscribe(topic string, client MQTT.Client) error {
 	return nil
 }
 
-func Subscribe(topic string, f MQTT.MessageHandler) error {
+func MqttSubscribe(topic string, f MQTT.MessageHandler) error {
 	client, err := subscribeClient(topic, f)
 	if err != nil {
 		return err
@@ -57,7 +57,7 @@ func Subscribe(topic string, f MQTT.MessageHandler) error {
 	return subscribe(topic, client)
 }
 
-func Publish(topic, msgData string) error {
+func MqttPublish(topic, msgData string) error {
 	client, err := publishClient()
 	if err != nil {
 		return err
@@ -66,4 +66,16 @@ func Publish(topic, msgData string) error {
 	token.Wait()
 	client.Disconnect(250)
 	return nil
+}
+
+type Mqtt struct {
+}
+
+func (m *Mqtt)SendMsg(clientId string, MsgData string) error {
+	return MqttPublish("Together/LGS_Together", MsgData)
+}
+func (m *Mqtt)ListenMsg(listerId string, f MsgCallback) error {
+	return MqttSubscribe(listerId, func(client MQTT.Client, msg MQTT.Message) {
+		f(string(msg.Payload()))
+	})
 }

@@ -27,13 +27,12 @@ dependencies {
 
 repositories {
     maven {
-        url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
+        url "https://repo.eclipse.org/content/repositories/paho-releases/"
     }
 }
 
 dependencies {
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
-    compile ('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {
-        exclude module: 'support-v4'
-    }
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.0'
+    compile 'com.google.firebase:firebase-messaging:9.0.0'
 }

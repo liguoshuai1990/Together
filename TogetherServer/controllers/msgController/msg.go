@@ -2,7 +2,7 @@ package msgController
 
 import (
 	"github.com/astaxie/beego"
-	"TogetherServer/models/mgs"
+	"TogetherServer/models/msg"
 	"time"
 )
 
@@ -12,12 +12,10 @@ type MsgController struct {
 	beego.Controller
 }
 
-func resvTogetherMessage(topic, msg string)  {
+func resvTogetherMessage(msg string)  {
 	/* 添加用户信息 */
 
 	/* 添加组信息(包括组成员) */
-
-	beego.Error("TOPIC: ", topic)
 	beego.Error("MSG: ", msg)
 }
 

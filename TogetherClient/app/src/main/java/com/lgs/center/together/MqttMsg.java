@@ -6,6 +6,7 @@ import android.util.Log;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -79,12 +80,18 @@ public class MqttMsg {
         });
         return mqttAndroidClient;
     }
-    private void publishConnect(final MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions) {
+    private void publishConnect(MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions, final String publishTopic, final String publishMessage) {
         try {
             mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.v("TogetherApp", "Mqtt Client Connected to Mqtt Server Success.");
+                    publishMessage((MqttAndroidClient)asyncActionToken.getClient(), publishTopic, publishMessage);
+                    try {
+                        asyncActionToken.getClient().disconnect();
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
@@ -129,13 +136,13 @@ public class MqttMsg {
                 }
             });
             // THIS DOES NOT WORK!
-//            mqttAndroidClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
-//                @Override
-//                public void messageArrived(String topic, MqttMessage message) throws Exception {
-//                    // message Arrived!
-//                    System.out.println("Message: " + topic + " : " + new String(message.getPayload()));
-//                }
-//            });
+            mqttAndroidClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    // message Arrived!
+                    System.out.println("Message: " + topic + " : " + new String(message.getPayload()));
+                }
+            });
         } catch (MqttException ex){
             Log.v("TogetherApp", "Exception whilst subscribing");
             ex.printStackTrace();
@@ -144,10 +151,6 @@ public class MqttMsg {
 
     private void publishMessage(MqttAndroidClient mqttAndroidClient, String publishTopic, String publishMessage){
         try {
-            if(!mqttAndroidClient.isConnected()){
-                Log.e("TogetherApp", " Message Published Error.");
-                return;
-            }
             MqttMessage message = new MqttMessage();
             message.setPayload(publishMessage.getBytes());
             message.setQos(0);
@@ -166,14 +169,6 @@ public class MqttMsg {
 
     public void Publish(String publishTopic, String publishMessage) {
         MqttAndroidClient mqttAndroidClient = this.publishClient();
-        this.publishConnect(mqttAndroidClient, this.mqttConnectOptions());
-        try {
-            Thread.sleep(1000);
-            this.publishMessage(mqttAndroidClient, publishTopic, publishMessage);
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mqttAndroidClient.close();
+        this.publishConnect(mqttAndroidClient, this.mqttConnectOptions(), publishTopic, publishMessage);
     }
 }

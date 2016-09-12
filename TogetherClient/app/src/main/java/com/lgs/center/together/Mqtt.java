@@ -13,7 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 
-public class MqttMsg {
+public class Mqtt implements IMsgDriver {
     public Context context;
 
     private MqttConnectOptions mqttConnectOptions() {
@@ -53,7 +53,7 @@ public class MqttMsg {
         return mqttAndroidClient;
     }
 
-    private MqttAndroidClient subscribeClient(final String subscriptionTopic) {
+    private MqttAndroidClient subscribeClient(final String subscriptionTopic, final IMsgCallback f) {
         final MqttAndroidClient mqttAndroidClient = this.mqttClient();
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
@@ -61,7 +61,7 @@ public class MqttMsg {
                 if (reconnect) {
                     Log.v("TogetherApp", "Mqtt Client reconnect. ");
                     // Because Clean Session is true, we need to re-subscribe
-                    subscribeToTopic(mqttAndroidClient, subscriptionTopic);
+                    subscribeToTopic(mqttAndroidClient, subscriptionTopic, f);
                 } else {
                     Log.v("TogetherApp", "Mqtt Client Connected to: " + serverURI);
                 }
@@ -105,12 +105,12 @@ public class MqttMsg {
         }
     }
 
-    private void subscribeConnect(final MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions, final String subscriptionTopic) {
+    private void subscribeConnect(final MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions, final String subscriptionTopic, final IMsgCallback f) {
         try {
             mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    subscribeToTopic(mqttAndroidClient, subscriptionTopic);
+                    subscribeToTopic(mqttAndroidClient, subscriptionTopic, f);
                 }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
@@ -123,7 +123,7 @@ public class MqttMsg {
         }
     }
 
-    private void subscribeToTopic(MqttAndroidClient mqttAndroidClient, String subscriptionTopic){
+    private void subscribeToTopic(MqttAndroidClient mqttAndroidClient, String subscriptionTopic, final IMsgCallback f){
         try {
             mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
                 @Override
@@ -135,12 +135,11 @@ public class MqttMsg {
                     Log.v("TogetherApp", "Mqtt Client Failed to subscribe");
                 }
             });
-            // THIS DOES NOT WORK!
             mqttAndroidClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     // message Arrived!
-                    System.out.println("Message: " + topic + " : " + new String(message.getPayload()));
+                    f.Callback(new String(message.getPayload()));
                 }
             });
         } catch (MqttException ex){
@@ -162,13 +161,25 @@ public class MqttMsg {
         }
     }
 
-    public void Subscribe(String subscriptionTopic){
-        MqttAndroidClient mqttAndroidClient = this.subscribeClient(subscriptionTopic);
-        this.subscribeConnect(mqttAndroidClient, this.mqttConnectOptions(), subscriptionTopic);
+    public void Subscribe(String subscriptionTopic, IMsgCallback f){
+        MqttAndroidClient mqttAndroidClient = this.subscribeClient(subscriptionTopic, f);
+        this.subscribeConnect(mqttAndroidClient, this.mqttConnectOptions(), subscriptionTopic, f);
     }
 
     public void Publish(String publishTopic, String publishMessage) {
         MqttAndroidClient mqttAndroidClient = this.publishClient();
         this.publishConnect(mqttAndroidClient, this.mqttConnectOptions(), publishTopic, publishMessage);
+    }
+
+    @Override
+    public String SendMsg(String clientId, String MsgData) {
+        Publish(clientId, MsgData);
+        return "";
+    }
+
+    @Override
+    public String ListenMsg(String listerId, IMsgCallback f) {
+        Subscribe(listerId, f);
+        return "";
     }
 }

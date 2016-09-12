@@ -6,14 +6,18 @@ public class Message {
     public Context context;
 
     public void SendMsg(String topic, String content) {
-        MqttMsg mqttMsg = new MqttMsg();
-        mqttMsg.context = this.context;
-        mqttMsg.Publish(topic, content);
+        Mqtt mqtt = new Mqtt();
+        mqtt.context = this.context;
+        mqtt.Publish(topic, content);
     }
     public void ResvMsg(String topic) {
-        MqttMsg mqttMsg = new MqttMsg();
-        mqttMsg.context = this.context;
-        mqttMsg.Subscribe(topic);
+        IMsgDriver mqtt = new Mqtt();
+        mqtt.ListenMsg("",  new IMsgCallback() {
+            @Override
+            public void Callback(String MsgData) {
+                System.out.println(MsgData);
+            }
+        });
     }
 }
 

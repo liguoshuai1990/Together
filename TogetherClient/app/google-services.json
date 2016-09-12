@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "577712800731",
+    "project_id": "liguoshuai10"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577712800731:android:6e6f00e8b6e01c86",
+        "android_client_info": {
+          "package_name": "com.lgs.center.together"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj_1ohxsQkIVT3PWVWxbf030T8RkTIuEQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,15 +5,19 @@ import (
 	"github.com/astaxie/beego"
 )
 
+func getSenderId() string {
+	return beego.AppConfig.String("gcmSenderId")
+}
+
 func GcmSubscribe(h gcm.MessageHandler) error {
-	return gcm.Listen(beego.AppConfig.String("gcmSenderId"), beego.AppConfig.String("gcmApiKey"), h, nil)
+	return gcm.Listen(getSenderId(), beego.AppConfig.String("gcmApiKey"), h, nil)
 }
 
 func GcmPublish(clientId string, MsgData string) error {
 	m := gcm.XmppMessage{}
 	m.Data = gcm.Data{"data": MsgData}
 	m.To = clientId
-	_, _, err := gcm.SendXmpp(beego.AppConfig.String("gcmSenderId"), beego.AppConfig.String("gcmApiKey"), m)
+	_, _, err := gcm.SendXmpp(getSenderId(), beego.AppConfig.String("gcmApiKey"), m)
 	return err
 }
 

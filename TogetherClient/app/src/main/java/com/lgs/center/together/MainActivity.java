@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 /* 发送消息 */
                 Message mqttMessage = new Message();
                 mqttMessage.context = context;
-                mqttMessage.SendMsg("Together/with", topicText.getText().toString());
+                mqttMessage.SendMsg(topicText.getText().toString());
                 topicGroupText.setText(topicText.getText());
             }
         });

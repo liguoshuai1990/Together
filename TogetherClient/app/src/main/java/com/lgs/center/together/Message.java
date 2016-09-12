@@ -2,13 +2,12 @@ package com.lgs.center.together;
 
 import android.content.Context;
 
-public class Message {
-    public Context context;
+class Message {
+    Context context;
 
-    public void SendMsg(String topic, String content) {
-        Mqtt mqtt = new Mqtt();
-        mqtt.context = this.context;
-        mqtt.Publish(topic, content);
+    void SendMsg(String content) {
+        IMsgDriver mqtt = new Fcm();
+        mqtt.SendMsg(context.getString(R.string.senderid), content);
     }
     public void ResvMsg(String topic) {
         IMsgDriver mqtt = new Mqtt();

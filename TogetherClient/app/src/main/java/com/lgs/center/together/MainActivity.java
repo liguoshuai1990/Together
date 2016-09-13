@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.lgs.center.together.Msg.Message;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

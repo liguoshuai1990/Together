@@ -1,8 +1,4 @@
-package com.lgs.center.together;
-
-interface IMsgCallback {
-    void Callback(String MsgData);
-}
+package com.lgs.center.together.Msg;
 
 public interface IMsgDriver {
     String SendMsg(String clientId, String MsgData);

@@ -1,7 +1,10 @@
-package com.lgs.center.together;
+package com.lgs.center.together.Msg;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.lgs.center.together.Msg.IMsgCallback;
+import com.lgs.center.together.Msg.IMsgDriver;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;

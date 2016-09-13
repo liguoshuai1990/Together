@@ -1,9 +1,10 @@
-package com.lgs.center.together;
+package com.lgs.center.together.Msg;
 
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
+import com.lgs.center.together.Msg.IMsgCallback;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

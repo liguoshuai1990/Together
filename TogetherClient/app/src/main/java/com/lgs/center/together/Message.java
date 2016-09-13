@@ -2,6 +2,12 @@ package com.lgs.center.together;
 
 import android.content.Context;
 
+
+import com.lgs.center.together.Msg.Fcm;
+import com.lgs.center.together.Msg.IMsgCallback;
+import com.lgs.center.together.Msg.IMsgDriver;
+import com.lgs.center.together.Msg.Mqtt;
+
 class Message {
     Context context;
 

@@ -12,17 +12,32 @@ class Message {
     Context context;
 
     void SendMsg(String content) {
-        IMsgDriver mqtt = new Fcm();
-        mqtt.SendMsg(context.getString(R.string.senderid), content);
+        IMsgDriver msg;
+        switch (context.getString(R.string.msg_driver)) {
+            case "Fcm":
+                msg = new Fcm();
+                break;
+            case "Mqtt":
+                msg = new Mqtt();
+                break;
+            default:
+                msg = new Fcm();
+        }
+        msg.SendMsg(context.getString(R.string.senderid), content);
     }
-    public void ResvMsg(String topic) {
-        IMsgDriver mqtt = new Mqtt();
-        mqtt.ListenMsg("",  new IMsgCallback() {
-            @Override
-            public void Callback(String MsgData) {
-                System.out.println(MsgData);
-            }
-        });
+    void ListenMsg(String topic, IMsgCallback f) {
+        IMsgDriver msg;
+        switch (context.getString(R.string.msg_driver)) {
+            case "Fcm":
+                msg = new Fcm();
+                break;
+            case "Mqtt":
+                msg = new Mqtt();
+                break;
+            default:
+                msg = new Fcm();
+        }
+        msg.ListenMsg(topic, f);
     }
 }
 

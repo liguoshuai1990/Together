@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.lgs.center.together.Msg.Message;
+import com.lgs.center.together.Msg.IMsgCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,16 +19,21 @@ public class MainActivity extends AppCompatActivity {
         final TextView topicGroupText = (TextView)findViewById(R.id.topicGroupTextView);
         final EditText topicText = (EditText)findViewById(R.id.topicEditText);
         Button togetherButton = (Button)findViewById(R.id.togetherButton);
+        final Message mqttMessage = new Message();
+        mqttMessage.context = this.getApplicationContext();;
+        mqttMessage.ListenMsg("Together.ResvGroupMsg", new IMsgCallback() {
+            @Override
+            public void Callback(String MsgData) {
+                System.out.println(MsgData);
+                topicGroupText.setText(MsgData);
+            }
+        });
 
-        final Context context = this.getApplicationContext();
         togetherButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /* 发送消息 */
-                Message mqttMessage = new Message();
-                mqttMessage.context = context;
                 mqttMessage.SendMsg(topicText.getText().toString());
-                topicGroupText.setText(topicText.getText());
             }
         });
 

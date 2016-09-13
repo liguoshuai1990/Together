@@ -2,4 +2,6 @@
     <string name="app_name">Together</string>
     <string name="topic_text">topic: </string>
     <string name="senderid">577712800731</string>
+    <string name="msg_driver">Fcm</string>
+    <string name="http_serverUrl">Fcm</string>
 </resources>

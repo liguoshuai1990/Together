@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-import com.lgs.center.together.Msg.IMsgCallback;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

@@ -20,11 +20,11 @@
 >
 >                   Together
 >client   -------------------------------->   server
+
+* * * *
 * * * *
 
 
-
-* * * *
 ## 消息中间件
 ### 侦听(订阅)         
 > Listening(String listerId, IMsgCallback f)
@@ -33,7 +33,7 @@
 ### 发送消息
 > SendMessage(String clientId, String MsgData)
 > 参数： 客户端ID、消息体
-* * * *
+
 * * * *
 
 

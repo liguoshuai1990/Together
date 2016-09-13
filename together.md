@@ -1,14 +1,4 @@
 
-
-消息中間件:
-1、侦听(订阅)         Listening
-                      收到客户端的消息后
-					  资源： 客户端ID、消息体
-
-2、发送消息           SendMessage
-                      资源： 客户端ID、消息体
-
-
 # 交互消息
 ## Together请求消息
   用户发送到服务端的消息，请求加入组一起玩
@@ -23,12 +13,27 @@
  * 组信息 (携带组topic、组ID)
  * 组成员
 
-
+* * * *
+* * * *
 >                    Group
 >server   -------------------------------->   client
 >
 >                   Together
 >client   -------------------------------->   server
+* * * *
+
+
+
+* * * *
+## 消息中间件
+### 侦听(订阅)         
+> Listening(String listerId, IMsgCallback f)
+> 参数：客户端ID、收到消息的回调
+
+### 发送消息
+> SendMessage(String clientId, String MsgData)
+> 参数： 客户端ID、消息体
+* * * *
 * * * *
 
 

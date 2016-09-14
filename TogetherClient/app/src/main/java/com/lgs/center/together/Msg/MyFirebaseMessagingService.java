@@ -8,6 +8,8 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
+    IMsgCallback MyCallBack;
+
     /**
      * Called when message is received.
      *
@@ -33,6 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            MyCallBack.Callback(remoteMessage.getData().get("messageData"));
         }
 
         // Check if message contains a notification payload.

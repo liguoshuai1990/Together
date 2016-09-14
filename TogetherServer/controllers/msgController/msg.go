@@ -12,17 +12,18 @@ type MsgController struct {
 	beego.Controller
 }
 
-func resvTogetherMessage(msg string)  {
+func resvTogetherMessage(msgData string)  {
 	/* 添加用户信息 */
 
 	/* 添加组信息(包括组成员) */
-	beego.Error("MSG: ", msg)
-}
+	beego.Error("MSG: ", msgData)
 
 
-func resvGroupMessage(topic, msg string)  {
-	beego.Error("TOPIC: ", topic)
-	beego.Error("MSG: ", msg)
+	/* 询问用户是否加入组 */
+	if msgData != "" {
+		msg.SendGroupRequest(msgData)
+	}
+
 }
 
 func ResvTogetherMsg() {

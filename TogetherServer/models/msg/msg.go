@@ -22,15 +22,27 @@ func ResvTogetherRequest(f MsgCallback) error {
  *  1、组信息 (携带组topic、组ID)
  *  2、组成员
  */
-func SendGroupRequest(clientId string) error {
-	return SendMsg("Group/Jion"+clientId, "hello")
+func SendGroupRequest(groupInfo string) error {
+	return SendMsg("Together.ResvGroupMsg", "hello " + groupInfo)
 }
-func ResvGroupRequest(clientId string, f MsgCallback) error {
-	return ListenMsg("Group/Jion"+clientId, f)
+func ResvGroupRequest(f MsgCallback) error {
+	return ListenMsg("Together.ResvGroupMsg", f)
 }
 
 func SendMsg(topic, msgData string) error {
-	return MqttPublish(topic, msgData)
+	var msgClient MsgDriver
+	switch beego.AppConfig.String("msgDriver") {
+		case "Gcm": {
+			msgClient = new(Fcm)
+		}
+		case "Mqtt": {
+			msgClient = new(Mqtt)
+		}
+		default: {
+			msgClient = new(Fcm)
+		}
+	}
+	return msgClient.SendMsg(topic, msgData)
 }
 
 func ListenMsg(listerId string, f MsgCallback) error {

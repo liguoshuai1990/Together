@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Firebase Cloud Messaging
  */
 public class Fcm implements IMsgDriver {
+
     @Override
     public String SendMsg(String clientId, String MsgData) {
         FirebaseMessaging fm = FirebaseMessaging.getInstance();
@@ -28,6 +29,9 @@ public class Fcm implements IMsgDriver {
     public String ListenMsg(String listerId, IMsgCallback f) {
         FirebaseMessaging fm = FirebaseMessaging.getInstance();
         fm.subscribeToTopic("" + listerId);
+
+        
+
         return null;
     }
 }

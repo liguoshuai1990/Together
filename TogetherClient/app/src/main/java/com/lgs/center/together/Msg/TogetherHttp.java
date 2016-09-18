@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Http implements IMsgDriver {
+public class TogetherHttp implements IMsgDriver {
     @Override
     public String SendMsg(String clientId, String MsgData) {
         try {

@@ -4,4 +4,6 @@
     <string name="senderid">577712800731</string>
     <string name="msg_driver">Fcm</string>
     <string name="http_serverUrl">Fcm</string>
+    <string name="AWSAccessKeyId">Fcm</string>
+    <string name="AWSSecretKey">Fcm</string>
 </resources>

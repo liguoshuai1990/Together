@@ -24,16 +24,19 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".Msg.MyFirebaseMessagingService">
+            android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".Msg.MyFirebaseInstanceIdService">
+            android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
+        </service>
+        <service android:name=".MsgService">
+
         </service>
         <!-- Mqtt Service -->
         <service android:name="org.eclipse.paho.android.service.MqttService">

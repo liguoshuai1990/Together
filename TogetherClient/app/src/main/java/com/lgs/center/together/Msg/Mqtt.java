@@ -14,7 +14,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 
 public class Mqtt implements IMsgDriver {
-    public Context context;
+    private Context context;
+
+    public Mqtt(Context c) {
+        context = c;
+    }
 
     private MqttConnectOptions mqttConnectOptions() {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();

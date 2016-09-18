@@ -1,4 +1,4 @@
-package com.lgs.center.together.Msg;
+package com.lgs.center.together;
 
 import android.util.Log;
 

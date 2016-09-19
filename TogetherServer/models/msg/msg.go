@@ -29,34 +29,30 @@ func ResvGroupRequest(f MsgCallback) error {
 	return ListenMsg("Together.ResvGroupMsg", f)
 }
 
-func SendMsg(topic, msgData string) error {
-	var msgClient MsgDriver
+func GetMsgDriverClient() MsgDriver {
 	switch beego.AppConfig.String("msgDriver") {
 		case "Gcm": {
-			msgClient = new(Fcm)
+			return new(Fcm)
 		}
 		case "Mqtt": {
-			msgClient = new(Mqtt)
+			return new(Mqtt)
+		}
+		case "BaiduPush": {
+			return new(BaiduPush)
 		}
 		default: {
-			msgClient = new(Fcm)
+			beego.Error("Mast Config msgDriver.")
 		}
 	}
+	return new(BaiduPush)
+}
+
+func SendMsg(topic, msgData string) error {
+	msgClient := GetMsgDriverClient()
 	return msgClient.SendMsg(topic, msgData)
 }
 
 func ListenMsg(listerId string, f MsgCallback) error {
-	var msgClient MsgDriver
-	switch beego.AppConfig.String("msgDriver") {
-		case "Gcm": {
-			msgClient = new(Fcm)
-		}
-		case "Mqtt": {
-			msgClient = new(Mqtt)
-		}
-		default: {
-			msgClient = new(Fcm)
-		}
-	}
+	msgClient := GetMsgDriverClient()
 	return msgClient.ListenMsg(listerId, f)
 }

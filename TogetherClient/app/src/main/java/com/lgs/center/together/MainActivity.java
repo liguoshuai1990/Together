@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
 import com.lgs.center.together.Msg.IMsgCallback;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
         //绑定Service
         Intent msgIntent = new Intent(this, MsgService.class);
-//        startService(msgIntent);
+        //startService(msgIntent);
         bindService(msgIntent, MsgServerconnection, Context.BIND_AUTO_CREATE);
 
+        PushSettings.enableDebugMode(context, true);
+        PushManager.startWork(context, PushConstants.LOGIN_TYPE_API_KEY, context.getString(R.string.baiduApiKey));
 
         Log.v("Together", "MainActivity onCreate.");
 

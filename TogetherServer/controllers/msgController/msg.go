@@ -36,3 +36,27 @@ func ResvTogetherMsg() {
 		time.Sleep(3 * time.Second)
 	}
 }
+
+type TogetherReqest struct {
+
+}
+
+// @Title createUser
+// @Description create users
+// @Param	body		body 	TogetherReqest	true		"body for TogetherReqest content"
+// @Success 200 {string} Success
+// @Failure 403 body is empty
+// @router /sendTogetherReqest [post]
+func (m *MsgController) Post() {
+	/* 接收 TogetherReqest 消息 */
+	//togetherReqest := TogetherReqest{}
+	//json.Unmarshal(m.Ctx.Input.RequestBody, &togetherReqest)
+
+	beego.Error("TogetherReqest: Recv Post Message", string(m.Ctx.Input.RequestBody))
+
+	/* 发送 GroupWith 消息 */
+	msg.SendGroupRequest(string(m.Ctx.Input.RequestBody))
+
+	m.Data["json"] = map[string]string{"Success": string(m.Ctx.Input.RequestBody)}
+	m.ServeJSON()
+}

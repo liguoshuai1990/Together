@@ -48,7 +48,6 @@ public class MsgService extends Service {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.lgs.center.MSG_RECEIVER");
         registerReceiver(msgReceiver, intentFilter);
-
     }
 
     @Override

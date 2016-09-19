@@ -6,4 +6,6 @@
     <string name="http_serverUrl">Fcm</string>
     <string name="AWSAccessKeyId">Fcm</string>
     <string name="AWSSecretKey">Fcm</string>
+    <string name="TopicARN">arn:aws:sns:us-east-1:624065279975:TogetherResvGroupMsg</string>
+    <string name="baiduApiKey">QF4cY7jb0Lre7GDZPxLorm9M</string>
 </resources>

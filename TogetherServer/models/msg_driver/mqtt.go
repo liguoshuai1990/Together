@@ -1,4 +1,4 @@
-package msg
+package msg_dirver
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
@@ -72,10 +72,10 @@ type Mqtt struct {
 }
 
 func (m *Mqtt)SendMsg(clientId string, MsgData string) error {
-	return MqttPublish("Together/LGS_Together", MsgData)
+	return MqttPublish("Together/Group", MsgData)
 }
-func (m *Mqtt)ListenMsg(listerId string, f MsgCallback) error {
-	return MqttSubscribe(listerId, func(client MQTT.Client, msg MQTT.Message) {
+func (m *Mqtt)ListenMsg(f MsgCallback) error {
+	return MqttSubscribe("Together/with", func(client MQTT.Client, msg MQTT.Message) {
 		f(string(msg.Payload()))
 	})
 }

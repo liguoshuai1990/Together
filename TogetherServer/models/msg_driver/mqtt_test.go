@@ -1,4 +1,4 @@
-package msg
+package msg_dirver
 
 import (
 	"testing"

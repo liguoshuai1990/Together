@@ -2,8 +2,8 @@ package msgController
 
 import (
 	"github.com/astaxie/beego"
-	"TogetherServer/models/msg"
 	"time"
+	"TogetherServer/models"
 )
 
 
@@ -21,14 +21,14 @@ func resvTogetherMessage(msgData string)  {
 
 	/* 询问用户是否加入组 */
 	if msgData != "" {
-		msg.SendGroupRequest(msgData)
+		models.SendGroupRequest(msgData)
 	}
 
 }
 
 func ResvTogetherMsg() {
 	for {
-		err := msg.ResvTogetherRequest(resvTogetherMessage)
+		err := models.ResvTogetherRequest(resvTogetherMessage)
 		if err == nil {
 			break
 		}
@@ -55,7 +55,7 @@ func (m *MsgController) Post() {
 	beego.Error("TogetherReqest: Recv Post Message", string(m.Ctx.Input.RequestBody))
 
 	/* 发送 GroupWith 消息 */
-	msg.SendGroupRequest(string(m.Ctx.Input.RequestBody))
+	models.SendGroupRequest(string(m.Ctx.Input.RequestBody))
 
 	m.Data["json"] = map[string]string{"Success": string(m.Ctx.Input.RequestBody)}
 	m.ServeJSON()

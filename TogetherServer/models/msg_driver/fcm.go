@@ -1,4 +1,4 @@
-package msg
+package msg_dirver
 
 import (
 	fcm "github.com/google/go-gcm"
@@ -10,8 +10,18 @@ func getSenderId() string {
 	return beego.AppConfig.String("fcmSenderId")
 }
 
+func fcmListen(h fcm.MessageHandler) error {
+	err := fcm.Listen(getSenderId(), beego.AppConfig.String("fcmApiKey"), h, nil)
+	if err != nil {
+		beego.Error("fcm.Listen Error.", err)
+	}
+	return err
+}
+
 func FcmSubscribe(h fcm.MessageHandler) error {
-	return fcm.Listen(getSenderId(), beego.AppConfig.String("fcmApiKey"), h, nil)
+	go fcmListen(h)
+	beego.Info("Fcm Subscribe ")
+	return nil
 }
 
 func FcmPublish(clientId string, MsgData string) error {
@@ -27,9 +37,9 @@ type Fcm struct {}
 func (m *Fcm)SendMsg(clientId string, MsgData string) error {
 	return FcmPublish(clientId, MsgData)
 }
-func (m *Fcm)ListenMsg(listerId string, f MsgCallback) error {
+func (m *Fcm)ListenMsg(f MsgCallback) error {
 	return FcmSubscribe(func (cm fcm.CcsMessage) error{
-		beego.Error("Received Message: %+v", cm)
+		beego.Info("Received Message: %+v", cm)
 		data, ok := cm.Data["my_message"]
 		if ok && data != nil {
 			f(fmt.Sprint(data))

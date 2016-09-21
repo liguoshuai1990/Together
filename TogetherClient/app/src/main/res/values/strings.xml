@@ -2,10 +2,6 @@
     <string name="app_name">Together</string>
     <string name="topic_text">topic: </string>
     <string name="senderid">577712800731</string>
-    <string name="msg_driver">Fcm</string>
-    <string name="http_serverUrl">Fcm</string>
-    <string name="AWSAccessKeyId">Fcm</string>
-    <string name="AWSSecretKey">Fcm</string>
-    <string name="TopicARN">arn:aws:sns:us-east-1:624065279975:TogetherResvGroupMsg</string>
-    <string name="baiduApiKey">QF4cY7jb0Lre7GDZPxLorm9M</string>
+    <string name="msg_driver">Mqtt</string>
+    <string name="mqtt_serverUrl">tcp://52.23.228.152:1883</string>
 </resources>

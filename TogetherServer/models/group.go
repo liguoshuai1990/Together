@@ -1,4 +1,4 @@
-package group
+package models
 
 import (
 	"github.com/nu7hatch/gouuid"
@@ -41,7 +41,7 @@ func GetAllGroups() map[string]*Group {
 
 func UpdateGroup(gid string, gg *Group) (g *Group, err error) {
 	if g, ok := GroupList[gid]; ok {
-		if gg.Users != "" {
+		if len(gg.Users) > 0 {
 			g.Users = gg.Users
 		}
 		return g, nil

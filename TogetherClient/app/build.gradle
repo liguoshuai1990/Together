@@ -36,7 +36,6 @@ dependencies {
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.0'
     compile 'com.google.firebase:firebase-core:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
-    compile 'com.amazonaws:aws-android-sdk-sns:2.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

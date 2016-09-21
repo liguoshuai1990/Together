@@ -9,14 +9,14 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import com.lgs.center.together.Msg.*;
+import com.lgs.center.together.MsgDriver.*;
 
 public class MsgService extends Service {
     Context context;
     private IMsgCallback iMsgCallback;
+    IMsgDriver myMsgDriver;
 
-
-    private IMsgDriver getMsgDriver() {
+    IMsgDriver GetMsgDriver() {
         IMsgDriver msg;
         switch (context.getString(R.string.msg_driver)) {
             case "Fcm":
@@ -25,25 +25,18 @@ public class MsgService extends Service {
             case "Mqtt":
                 msg = new Mqtt(context);
                 break;
-            case "Sns":
-                msg = new Sns(context);
-                break;
             default:
-                msg = new Sns(context);
+                msg = new Mqtt(context);
         }
         return msg;
     }
 
     void SendMsg(String content) {
-        IMsgDriver msg = getMsgDriver();
-        msg.SendMsg(context.getString(R.string.senderid), content);
+        myMsgDriver.SendMsg(content);
     }
-    void ListenMsg(String topic, IMsgCallback f) {
-        IMsgDriver msg = getMsgDriver();
-        msg.ListenMsg(topic, f);
-
+    void ListenMsg(IMsgCallback f) {
+        myMsgDriver.ListenMsg();
         iMsgCallback = f;
-
         MsgReceiver msgReceiver = new MsgReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.lgs.center.MSG_RECEIVER");
@@ -62,31 +55,17 @@ public class MsgService extends Service {
     }
 
     class MsgBinder extends Binder {
-        /**
-         * 获取当前Service的实例
-         * @return
-         */
-        public MsgService getService() {
+        MsgService getService() {
             return MsgService.this;
         }
     }
 
-
-    /**
-     * 广播接收器
-     * @author len
-     *
-     */
     public class MsgReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            //拿到进度，更新UI
             Log.v("Together", "MsgRecevier" + intent.getExtras().getString("messageData"));
             iMsgCallback.Callback(intent.getExtras().getString("messageData"));
         }
-
     }
-
 }
 

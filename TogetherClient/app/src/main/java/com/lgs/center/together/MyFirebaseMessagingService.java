@@ -10,12 +10,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.lgs.center.together.Msg.IMsgCallback;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
-
-    private IMsgCallback msgCallBack;
 
     /**
      * Called when message is received.

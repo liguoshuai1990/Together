@@ -3,7 +3,7 @@ package userController
 import (
 	"encoding/json"
 	"github.com/astaxie/beego"
-	"TogetherServer/models/user"
+	"TogetherServer/models"
 )
 
 // Operations about Users
@@ -18,9 +18,9 @@ type UserController struct {
 // @Failure 403 body is empty
 // @router / [post]
 func (u *UserController) Post() {
-	var userData user.User
+	var userData models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &userData)
-	uid := user.AddUser(userData)
+	uid := models.AddUser(userData)
 	u.Data["json"] = map[string]string{"uid": uid}
 	u.ServeJSON()
 }
@@ -30,7 +30,7 @@ func (u *UserController) Post() {
 // @Success 200 {object} models.User
 // @router / [get]
 func (u *UserController) GetAll() {
-	users := user.GetAllUsers()
+	users := models.GetAllUsers()
 	u.Data["json"] = users
 	u.ServeJSON()
 }
@@ -44,7 +44,7 @@ func (u *UserController) GetAll() {
 func (u *UserController) Get() {
 	uid := u.GetString(":uid")
 	if uid != "" {
-		userData, err := user.GetUser(uid)
+		userData, err := models.GetUser(uid)
 		if err != nil {
 			u.Data["json"] = err.Error()
 		} else {
@@ -64,9 +64,9 @@ func (u *UserController) Get() {
 func (u *UserController) Put() {
 	uid := u.GetString(":uid")
 	if uid != "" {
-		var userData user.User
+		var userData models.User
 		json.Unmarshal(u.Ctx.Input.RequestBody, &userData)
-		uu, err := user.UpdateUser(uid, &userData)
+		uu, err := models.UpdateUser(uid, &userData)
 		if err != nil {
 			u.Data["json"] = err.Error()
 		} else {
@@ -84,7 +84,7 @@ func (u *UserController) Put() {
 // @router /:uid [delete]
 func (u *UserController) Delete() {
 	uid := u.GetString(":uid")
-	user.DeleteUser(uid)
+	models.DeleteUser(uid)
 	u.Data["json"] = "delete success!"
 	u.ServeJSON()
 }
@@ -99,7 +99,7 @@ func (u *UserController) Delete() {
 func (u *UserController) Login() {
 	username := u.GetString("username")
 	password := u.GetString("password")
-	if user.Login(username, password) {
+	if models.Login(username, password) {
 		u.Data["json"] = "login success"
 	} else {
 		u.Data["json"] = "user not exist"

@@ -1,6 +1,5 @@
 package com.lgs.center.together;
 
-
 import android.content.*;
 import android.os.IBinder;
 import android.os.Bundle;
@@ -10,10 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.baidu.android.pushservice.PushConstants;
-import com.baidu.android.pushservice.PushManager;
-import com.baidu.android.pushservice.PushSettings;
-import com.lgs.center.together.Msg.IMsgCallback;
+import com.lgs.center.together.MsgDriver.IMsgCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,11 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         //绑定Service
         Intent msgIntent = new Intent(this, MsgService.class);
-        //startService(msgIntent);
         bindService(msgIntent, MsgServerconnection, Context.BIND_AUTO_CREATE);
-
-        PushSettings.enableDebugMode(context, true);
-        PushManager.startWork(context, PushConstants.LOGIN_TYPE_API_KEY, context.getString(R.string.baiduApiKey));
 
         Log.v("Together", "MainActivity onCreate.");
 
@@ -59,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             //返回一个MsgService对象
             final MsgService msgService = ((MsgService.MsgBinder)service).getService();
             msgService.context = context;
-            msgService.ListenMsg("Together.ResvGroupMsg", new IMsgCallback() {
+            msgService.myMsgDriver = msgService.GetMsgDriver();
+            msgService.ListenMsg(new IMsgCallback() {
                 @Override
                 public void Callback(String MsgData) {
                     System.out.println(MsgData);

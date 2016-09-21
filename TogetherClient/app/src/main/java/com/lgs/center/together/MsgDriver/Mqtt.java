@@ -1,8 +1,10 @@
-package com.lgs.center.together.Msg;
+package com.lgs.center.together.MsgDriver;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.lgs.center.together.R;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -16,8 +18,14 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 public class Mqtt implements IMsgDriver {
     private Context context;
 
+    private MqttAndroidClient publishClient;
+    private MqttAndroidClient subscribeClient;
+    private String subscriptionTopic;
+
     public Mqtt(Context c) {
         context = c;
+        publishClient = publishClient();
+        subscribeClient = subscribeClient();
     }
 
     private MqttConnectOptions mqttConnectOptions() {
@@ -27,28 +35,28 @@ public class Mqtt implements IMsgDriver {
         return mqttConnectOptions;
     }
 
-    private MqttAndroidClient mqttClient() {
-        return new MqttAndroidClient(context, "tcp://192.168.1.102:1883", "TogetherClient");
+    private MqttAndroidClient mqttClient(String clientId) {
+        return new MqttAndroidClient(context, context.getString(R.string.mqtt_serverUrl), clientId);
     }
 
     private MqttAndroidClient publishClient(){
-        MqttAndroidClient mqttAndroidClient = this.mqttClient();
+        MqttAndroidClient mqttAndroidClient = this.mqttClient("TogetherPublishClient");
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
                 if (reconnect) {
-                    Log.v("TogetherApp", "Mqtt Client reconnect. ");
+                    Log.v("TogetherApp", "publish Mqtt Client reconnect. ");
                 } else {
-                    Log.v("TogetherApp", "Mqtt Client Connected to: " + serverURI);
+                    Log.v("TogetherApp", "publish Mqtt Client Connected to: " + serverURI);
                 }
             }
             @Override
             public void connectionLost(Throwable cause) {
-                Log.v("TogetherApp", "Mqtt Client Connection was lost.");
+                Log.v("TogetherApp", "publish Mqtt Client Connection was lost.");
             }
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.v("TogetherApp", "Mqtt Client Incoming message: " + new String(message.getPayload()));
+                Log.v("TogetherApp", "publish Mqtt Client Incoming message: " + new String(message.getPayload()));
             }
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
@@ -57,26 +65,26 @@ public class Mqtt implements IMsgDriver {
         return mqttAndroidClient;
     }
 
-    private MqttAndroidClient subscribeClient(final String subscriptionTopic, final IMsgCallback f) {
-        final MqttAndroidClient mqttAndroidClient = this.mqttClient();
+    private MqttAndroidClient subscribeClient() {
+        MqttAndroidClient mqttAndroidClient = this.mqttClient("TogetherSubscribeClient");
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
                 if (reconnect) {
-                    Log.v("TogetherApp", "Mqtt Client reconnect. ");
+                    Log.v("TogetherApp", "subscribe Mqtt Client reconnect. ");
                     // Because Clean Session is true, we need to re-subscribe
-                    subscribeToTopic(mqttAndroidClient, subscriptionTopic, f);
+                    subscribeToTopic();
                 } else {
-                    Log.v("TogetherApp", "Mqtt Client Connected to: " + serverURI);
+                    Log.v("TogetherApp", "subscribe Mqtt Client Connected to: " + serverURI);
                 }
             }
             @Override
             public void connectionLost(Throwable cause) {
-                Log.v("TogetherApp", "Mqtt Client Connection was lost.");
+                Log.v("TogetherApp", "subscribe Mqtt Client Connection was lost.");
             }
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.v("TogetherApp", "Mqtt Client Incoming message: " + new String(message.getPayload()));
+                Log.v("TogetherApp", "subscribe Mqtt Client Incoming message: " + new String(message.getPayload()));
             }
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
@@ -84,15 +92,17 @@ public class Mqtt implements IMsgDriver {
         });
         return mqttAndroidClient;
     }
-    private void publishConnect(MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions, final String publishTopic, final String publishMessage) {
+    private void publishConnect(final String publishTopic, final String publishMessage) {
         try {
-            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
+            Log.v("TogetherApp", "publish Connect start connect");
+            publishClient.connect(this.mqttConnectOptions(), null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.v("TogetherApp", "Mqtt Client Connected to Mqtt Server Success.");
-                    publishMessage((MqttAndroidClient)asyncActionToken.getClient(), publishTopic, publishMessage);
+                    publishMessage(publishClient, publishTopic, publishMessage);
                     try {
-                        asyncActionToken.getClient().disconnect();
+                        Log.v("TogetherApp", "publish over Mqtt start DisConnected to Mqtt Server.");
+                        publishClient.disconnect();
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -109,12 +119,14 @@ public class Mqtt implements IMsgDriver {
         }
     }
 
-    private void subscribeConnect(final MqttAndroidClient mqttAndroidClient, MqttConnectOptions mqttConnectOptions, final String subscriptionTopic, final IMsgCallback f) {
+    private void subscribeConnect() {
         try {
-            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
+            Log.v("TogetherApp", "subscribeConnect start connect");
+            subscribeClient.connect(this.mqttConnectOptions(), null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    subscribeToTopic(mqttAndroidClient, subscriptionTopic, f);
+                    Log.v("TogetherApp", "subscribeConnect onSuccess");
+                    subscribeToTopic();
                 }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
@@ -127,9 +139,10 @@ public class Mqtt implements IMsgDriver {
         }
     }
 
-    private void subscribeToTopic(MqttAndroidClient mqttAndroidClient, String subscriptionTopic, final IMsgCallback f){
+    private void subscribeToTopic(){
         try {
-            mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
+            Log.v("TogetherApp", "subscribeToTopic " + subscriptionTopic);
+            subscribeClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.v("TogetherApp", "Mqtt Client Subscribed!");
@@ -139,11 +152,13 @@ public class Mqtt implements IMsgDriver {
                     Log.v("TogetherApp", "Mqtt Client Failed to subscribe");
                 }
             });
-            mqttAndroidClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
+            subscribeClient.subscribe(subscriptionTopic, 0, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     // message Arrived!
-                    f.Callback(new String(message.getPayload()));
+                    Intent intent = new Intent("com.lgs.center.MSG_RECEIVER");
+                    intent.putExtra("messageData", new String(message.getPayload()));
+                    context.sendBroadcast(intent);
                 }
             });
         } catch (MqttException ex){
@@ -165,25 +180,18 @@ public class Mqtt implements IMsgDriver {
         }
     }
 
-    public void Subscribe(String subscriptionTopic, IMsgCallback f){
-        MqttAndroidClient mqttAndroidClient = this.subscribeClient(subscriptionTopic, f);
-        this.subscribeConnect(mqttAndroidClient, this.mqttConnectOptions(), subscriptionTopic, f);
-    }
-
-    public void Publish(String publishTopic, String publishMessage) {
-        MqttAndroidClient mqttAndroidClient = this.publishClient();
-        this.publishConnect(mqttAndroidClient, this.mqttConnectOptions(), publishTopic, publishMessage);
-    }
-
     @Override
-    public String SendMsg(String clientId, String MsgData) {
-        Publish(clientId, MsgData);
+    public String SendMsg(String MsgData) {
+        Log.v("TogetherApp", " Mqtt Start SendMsg " + MsgData);
+        publishConnect("Together/with", MsgData);
         return "";
     }
 
     @Override
-    public String ListenMsg(String listerId, IMsgCallback f) {
-        Subscribe(listerId, f);
+    public String ListenMsg() {
+        Log.v("TogetherApp", " Mqtt Start ListenMsg " + "Together/Group");
+        this.subscriptionTopic = "Together/Group";
+        subscribeConnect();
         return "";
     }
 }
